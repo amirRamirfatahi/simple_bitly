@@ -9,7 +9,7 @@ Then use the package manager [pip](https://pip.pypa.io/en/stable/) to install si
 
 ```bash
 cd [PATH_TO_DOWNLOAD]
-pip install simple_bitly
+pip install .
 ```
 
 ## Deployment
