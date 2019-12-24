@@ -9,7 +9,7 @@ from constants import MAX_SHORTURL_LENGTH
 @mock.patch('redis.Redis', new_callable=mocks.RedisMock)
 class GeneratorTests(TestCase):
 
-    def test_AnyValidUrl_submitted_AShortUrlIsReturned(self, redis_mock):
+    def test_anyValidURL_submitted_aShortURLIsReturned(self, redis_mock):
         longurl = b'url=www.google.com'
         environ = {
             'wsgi.input': io.BytesIO(longurl),
@@ -20,7 +20,7 @@ class GeneratorTests(TestCase):
         self.assertLessEqual(len(shorturl), MAX_SHORTURL_LENGTH)
         self.assertEqual(longurl, redis_mock.get(shorturl))
 
-    def test_AnInvalidUrl_submitted_AnErrorIsRaised(self, redis_mock):
+    def test_anInvalidUrl_submitted_anErrorIsRaised(self, redis_mock):
         invalid_url = b'http://something'
         env = {
             'wsgi.input': io.BytesIO(invalid_url),
