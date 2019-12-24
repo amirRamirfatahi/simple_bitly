@@ -6,7 +6,7 @@ from simplebitly.redirector import redirector
 from constants import MAX_SHORTURL_LENGTH
 
 
-@mock.patch('redis.Redis', new_callable=mocks.RedisMock)
+@mock.patch('simplebitly.redirector.redis', new_callable=mocks.RedisMock)
 class RedirectorTests(TestCase):
 
     def test_aValidShortURL_submitted_okIsReturned(self, redis_mock):
@@ -15,7 +15,7 @@ class RedirectorTests(TestCase):
         environ = {
             'PATH_INFO': shorturl,
         }
-        redis_mock.set(shorturl, longurl)
+        redis_mock.set(shorturl[1:], longurl)
         result = redirector(environ, mocks.mock_start_response)
         response = result[0].decode()
         self.assertEqual(response, 'OK.')
