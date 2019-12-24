@@ -1,9 +1,7 @@
 from unittest import TestCase, mock
-import io
 
 from tests import mocks
 from simplebitly.redirector import redirector
-from constants import MAX_SHORTURL_LENGTH
 
 
 @mock.patch('simplebitly.redirector.redis', new_callable=mocks.RedisMock)
@@ -20,7 +18,6 @@ class RedirectorTests(TestCase):
         response = result[0].decode()
         self.assertEqual(response, 'OK.')
 
-
     def test_AnInvalidShortURL_submitted_AnErrorIsReturned(self, redis_mock):
         invalid_url = '/ijkmnopq'
         env = {
@@ -29,4 +26,3 @@ class RedirectorTests(TestCase):
         result = redirector(env, mocks.mock_start_response)
         response = result[0].decode()
         self.assertEqual(response, 'Not Found.')
-

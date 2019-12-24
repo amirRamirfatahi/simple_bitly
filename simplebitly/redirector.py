@@ -6,8 +6,6 @@ and redirects to the original url
 
 import redis
 
-from constants import MAX_LONGURL_LENGTH
-
 redis = redis.Redis(host='localhost', port='6379')
 
 
@@ -23,4 +21,3 @@ def redirector(environ, start_response):
     else:
         start_response('404', [])
         return [b'Not Found.']
-

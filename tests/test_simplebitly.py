@@ -37,4 +37,3 @@ class SimplebitlyTests(TestCase):
         response = response[0].decode()
         self.assertEqual(response, 'OK.')
         self.assertEqual(longurl.decode()[4:], mg_redis.get(shorturl).decode())
-

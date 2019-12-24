@@ -32,4 +32,3 @@ def generate_random_shorturl():
         prefix=get_date_prefix(),
         randompart=generate_random_string(6)
     )
-

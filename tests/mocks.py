@@ -22,4 +22,3 @@ class RedisMock:
 
 def mock_start_response(status, headers):
     pass
-

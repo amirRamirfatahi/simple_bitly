@@ -35,6 +35,3 @@ def setup_shorturl(url):
         result = redis.setnx(shorturl, url)
     redis.expire(shorturl, URL_TIMETOLIVE)
     return shorturl
-
-
-

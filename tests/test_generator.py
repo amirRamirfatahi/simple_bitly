@@ -30,4 +30,3 @@ class GeneratorTests(TestCase):
         result = generator(env, mocks.mock_start_response)
         errormessage = result[0].decode()
         self.assertEqual(errormessage, 'Invalid URL.')
-
