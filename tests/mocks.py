@@ -5,7 +5,7 @@ class RedisMock:
         self.maindict = dict()
 
     def get(self, key: str):
-        return self.maindict.get(key)
+        return self.maindict.get(key, '').encode()
 
     def set(self, key: str, value):
         self.maindict[key] = value
