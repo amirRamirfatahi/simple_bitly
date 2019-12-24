@@ -8,6 +8,7 @@ setup(
     description='Url shortener wsgi application',
     long_description=open('README.md').read(),
     install_requires=install_requires,
-    packages=find_packages()
+    packages=find_packages(),
+    license='MIT'
 )
 
