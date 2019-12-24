@@ -13,6 +13,8 @@ class RedisMock:
     def setnx(self, key: str, value):
         if not self.maindict.get(key):
             self.set(key, value)
+            return 1
+        return 0
 
     def expire(self, key: str, seconds: int):
         pass
