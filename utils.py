@@ -1,6 +1,5 @@
 from urllib.parse import urlparse
 import random
-from string import ascii_lowercase
 import time
 
 from constants import CHARSET
