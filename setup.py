@@ -1,6 +1,8 @@
 from setuptools import setup, find_packages
 
-install_requires = ['redis', 'gunicorn']
+dependencies = [
+    'redis',
+]
 
 setup(
     name='simple_bitly',

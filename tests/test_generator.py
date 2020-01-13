@@ -10,9 +10,9 @@ from constants import MAX_SHORTURL_LENGTH
 class GeneratorTests(TestCase):
 
     def test_anyValidURL_submitted_aShortURLIsReturned(self, redis_mock):
-        longurl = b'url=https://www.google.com'
+        longurl = 'url=https://www.google.com'
         environ = {
-            'wsgi.input': io.BytesIO(longurl),
+            'wsgi.input': io.BytesIO(longurl.encode()),
             'CONTENT_LENGTH': len(longurl)
         }
         result = generator(environ, mocks.mock_start_response)
@@ -22,9 +22,9 @@ class GeneratorTests(TestCase):
                          redis_mock.get(shorturl).decode())
 
     def test_anInvalidUrl_submitted_anErrorIsRaised(self, redis_mock):
-        invalid_url = b'http://something'
+        invalid_url = 'http://something'
         env = {
-            'wsgi.input': io.BytesIO(invalid_url),
+            'wsgi.input': io.BytesIO(invalid_url.encode()),
             'CONTENT_LENGTH': len(invalid_url)
         }
         result = generator(env, mocks.mock_start_response)
