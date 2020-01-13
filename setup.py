@@ -9,7 +9,7 @@ setup(
     version='0.1',
     description='Url shortener wsgi application',
     long_description=open('README.md').read(),
-    install_requires=install_requires,
+    install_requires=dependencies,
     packages=find_packages(),
     license='MIT'
 )

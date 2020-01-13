@@ -18,7 +18,7 @@ class GeneratorTests(TestCase):
         result = generator(environ, mocks.mock_start_response)
         shorturl = result[0].decode()
         self.assertLessEqual(len(shorturl), MAX_SHORTURL_LENGTH)
-        self.assertEqual(longurl.decode()[4:],
+        self.assertEqual(longurl[4:],
                          redis_mock.get(shorturl).decode())
 
     def test_anInvalidUrl_submitted_anErrorIsRaised(self, redis_mock):
