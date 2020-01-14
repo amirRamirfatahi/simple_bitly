@@ -1,32 +1,36 @@
-from unittest import TestCase, mock
 import io
-
+import json
+from bddrest.authoring import Given, when, response, status
 from tests import mocks
 from simplebitly.generator import generator
 from constants import MAX_SHORTURL_LENGTH
 
 
-@mock.patch('simplebitly.generator.redis', new_callable=mocks.RedisMock)
-class GeneratorTests(TestCase):
+class TestGenerator:
 
-    def test_anyValidURL_submitted_aShortURLIsReturned(self, redis_mock):
-        longurl = 'url=https://www.google.com'
+    def test_generator(self, mocker):
+        longurl = {"url": "https://www.google.com"}
+        invalid_url = {"url": "http://something"}
+
         environ = {
-            'wsgi.input': io.BytesIO(longurl.encode()),
-            'CONTENT_LENGTH': len(longurl)
+            'wsgi.input': io.BytesIO(json.dumps(longurl).encode()),
         }
-        result = generator(environ, mocks.mock_start_response)
-        shorturl = result[0].decode()
-        self.assertLessEqual(len(shorturl), MAX_SHORTURL_LENGTH)
-        self.assertEqual(longurl[4:],
-                         redis_mock.get(shorturl).decode())
+        mocked_redis = mocker.patch('simplebitly.generator.redis',
+                                    new_callable=mocks.RedisMock)
+        call = {
+            "title": "short URL generation",
+            "verb": "POST",
+            "json": longurl
+        }
+        with Given(generator, **call) as story:
+            shorturl = response.body.decode()
+            assert len(shorturl) == MAX_SHORTURL_LENGTH
+            assert longurl.get('url') ==  mocked_redis.get(shorturl).decode()
+            assert status == '201 Created'
 
-    def test_anInvalidUrl_submitted_anErrorIsRaised(self, redis_mock):
-        invalid_url = 'http://something'
-        env = {
-            'wsgi.input': io.BytesIO(invalid_url.encode()),
-            'CONTENT_LENGTH': len(invalid_url)
-        }
-        result = generator(env, mocks.mock_start_response)
-        errormessage = result[0].decode()
-        self.assertEqual(errormessage, 'Invalid URL.')
+            when('Trying an invalid URL', json=invalid_url)
+
+            errormessage = response.body.decode()
+            assert status == '400 Bad Request'
+            assert errormessage == 'Invalid URL.'
+
