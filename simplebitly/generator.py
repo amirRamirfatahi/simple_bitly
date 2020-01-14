@@ -7,7 +7,7 @@ shorter url pointing to the original url provided by the user.
 import redis
 import json
 from utils import isvalidurl, generate_random_shorturl
-from constants import MAX_LONGURL_LENGTH, URL_TIMETOLIVE
+from constants import URL_TIMETOLIVE
 
 redis = redis.Redis(host='localhost', port='6379')
 
