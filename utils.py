@@ -8,7 +8,7 @@ from constants import CHARSET
 def isvalidurl(url):
     try:
         parts = urlparse(url)
-        if all([parts.scheme, parts.netloc]):
+        if all([parts.scheme, '.' in parts.netloc]):
             return True
     except ValueError:
         pass
