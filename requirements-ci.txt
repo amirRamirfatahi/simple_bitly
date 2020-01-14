@@ -1,3 +1,5 @@
 bddrest
 pytest
+pytest-mock
 coveralls
+json
