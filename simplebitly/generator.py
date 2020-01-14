@@ -5,7 +5,7 @@ shorter url pointing to the original url provided by the user.
 """
 
 import redis
-
+import json
 from utils import isvalidurl, generate_random_shorturl
 from constants import MAX_LONGURL_LENGTH, URL_TIMETOLIVE
 
@@ -13,17 +13,16 @@ redis = redis.Redis(host='localhost', port='6379')
 
 
 def generator(environ, start_response):
-    content_length = int(environ.get('CONTENT_LENGTH', MAX_LONGURL_LENGTH))
-    request_body = environ.get('wsgi.input').read(content_length)
-    request_body = request_body.decode()
-    longurl = request_body[4:]
+    request_body = json.load(environ.get('wsgi.input', ''))
+    longurl = request_body.get('url', '')
     if not isvalidurl(longurl):
-        start_response('400', [('Content-Type', 'text/plain')])
+        start_response('400 Bad Request', [('Content-Type', 'text/plain')])
         return [b'Invalid URL.']
     shorturl = setup_shorturl(longurl)
     start_response(
-        '201',
-        [('Content-Type', 'text/plain'), ('Content-Length', len(shorturl))]
+        '201 Created',
+        [('Content-Type', 'text/plain'),
+         ('Content-Length', str(len(shorturl)))]
     )
     return [shorturl.encode()]
 
