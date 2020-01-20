@@ -4,7 +4,7 @@ import struct
 import json
 
 from hashids import Hashids
-from yhttp import Application, text, statuses
+from yhttp import Application, text, statuses, validate
 
 from . import db
 
@@ -36,6 +36,9 @@ def store(url):
 
 
 @app.route()
+@validate(fields=dict(
+    url=dict(required='400 Field missing: url')
+))
 @text
 def post(req):
     longurl = req.form['url']
