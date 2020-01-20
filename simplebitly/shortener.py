@@ -8,8 +8,9 @@ import re
 import struct
 import json
 
-import redis
 from hashids import Hashids
+
+from . import db
 
 
 URL_PATTERN=re.compile(
@@ -21,7 +22,6 @@ URL_PATTERN=re.compile(
 URL_TIMETOLIVE = 48 * 3600
 
 
-redis = redis.Redis(host='localhost', port='6379')
 hashids = Hashids()
 
 
@@ -33,10 +33,10 @@ def getfreshid():
 def store(url):
     while True:
         freshid = getfreshid()
-        if redis.setnx(freshid, url):
+        if db.redis.setnx(freshid, url):
             break
 
-    redis.expire(freshid, URL_TIMETOLIVE)
+    db.redis.expire(freshid, URL_TIMETOLIVE)
     return freshid
 
 

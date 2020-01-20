@@ -1,28 +1,19 @@
-#from unittest import TestCase, mock
-#
-#from tests import mocks
-#from simplebitly.redirector import redirector
-#
-#
-#@mock.patch('simplebitly.redirector.redis', new_callable=mocks.RedisMock)
-#class RedirectorTests(TestCase):
-#
-#    def test_aValidShortURL_submitted_okIsReturned(self, redis_mock):
-#        shorturl = '/abcdefgh'
-#        longurl = 'www.google.com'
-#        environ = {
-#            'PATH_INFO': shorturl,
-#        }
-#        redis_mock.set(shorturl[1:], longurl)
-#        result = redirector(environ, mocks.mock_start_response)
-#        response = result[0].decode()
-#        self.assertEqual(response, 'OK.')
-#
-#    def test_AnInvalidShortURL_submitted_AnErrorIsReturned(self, redis_mock):
-#        invalid_url = '/ijkmnopq'
-#        env = {
-#            'PATH_INFO': invalid_url
-#        }
-#        result = redirector(env, mocks.mock_start_response)
-#        response = result[0].decode()
-#        self.assertEqual(response, 'Not Found.')
+from bddrest import Given, status, when, response
+
+from simplebitly.redirector import app
+
+
+def test_redirector(redismock):
+    redismock.set('foo', 'https://example.com')
+    with Given(
+        app,
+        'Redirect a short url',
+        '/foo'
+    ):
+        print(response.text)
+        assert status == 302
+        assert response.headers['LOCATION'] == 'https://example.com'
+
+        when('URL does not exist', '/notexists')
+        assert status == 404
+

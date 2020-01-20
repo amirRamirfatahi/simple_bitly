@@ -14,7 +14,7 @@ def urandommock():
 
 @pytest.fixture
 def redismock():
-    from simplebitly import shortener
+    from simplebitly import db
 
     class RedisMock:
         maindict: dict
@@ -38,8 +38,8 @@ def redismock():
             pass
 
     dummy = RedisMock()
-    backup = shortener.redis
-    shortener.redis = dummy
+    backup = db.redis
+    db.redis = dummy
     yield dummy
-    shortener.redis = backup
+    db.redis = backup
 
