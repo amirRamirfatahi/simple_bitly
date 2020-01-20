@@ -13,5 +13,14 @@ test:
 	pytest
 
 
-.PHONY=install dev test
+ci:
+	pip install -e .
+	pip install -r requirements-ci.txt
+
+
+cover:
+	pytest tests --cov=simplebitly
+
+
+.PHONY=install dev test ci
 
