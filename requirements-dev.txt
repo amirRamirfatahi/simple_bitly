@@ -2,4 +2,4 @@
 gunicorn
 pytest-pudb
 coverage
-
+ipython

@@ -9,7 +9,7 @@ import redis
 redis = redis.Redis(host='localhost', port='6379')
 
 
-def redirector(environ, start_response):
+def app(environ, start_response):
     path = environ.get('PATH_INFO', '/')
     originalurl = redis.get(path[1:])
     if originalurl:
