@@ -1,14 +1,10 @@
-"""
-shortener.py is one of the two entry points of our application.
-It takes a POST request with any given valid url as request data and returns a
-shorter url pointing to the original url provided by the user.
-"""
 import os
 import re
 import struct
 import json
 
 from hashids import Hashids
+from yhttp import Application, text, statuses
 
 from . import db
 
@@ -20,9 +16,8 @@ URL_PATTERN=re.compile(
 
 
 URL_TIMETOLIVE = 48 * 3600
-
-
 hashids = Hashids()
+app = Application()
 
 
 def getfreshid():
@@ -40,19 +35,14 @@ def store(url):
     return freshid
 
 
-def app(environ, start_response):
-    request_body = json.load(environ.get('wsgi.input', ''))
-    longurl = request_body.get('url', '')
-
+@app.route()
+@text
+def post(req):
+    longurl = req.form['url']
     if not URL_PATTERN.match(longurl):
-        start_response('400 Bad Request', [('Content-Type', 'text/plain')])
-        return [b'Invalid URL.']
+        raise statuses.badrequest()
 
     shorturl = store(longurl)
-    start_response(
-        '201 Created',
-        [('Content-Type', 'text/plain'),
-         ('Content-Length', str(len(shorturl)))]
-    )
-    return [shorturl.encode()]
+    req.response.status = '201 Created'
+    return shorturl
 

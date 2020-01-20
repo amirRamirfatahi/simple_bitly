@@ -16,4 +16,4 @@ def test_shortener(urandommock, redismock):
         when('URL is not valid', json=dict(url='invalidurl'))
         assert status == 400
 
-
+        # TODO: test when url field is missing
