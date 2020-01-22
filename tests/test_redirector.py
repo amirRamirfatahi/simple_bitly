@@ -10,7 +10,6 @@ def test_redirector(redismock):
         'Redirect a short url',
         '/foo'
     ):
-        print(response.text)
         assert status == 302
         assert response.headers['LOCATION'] == 'https://example.com'
 
